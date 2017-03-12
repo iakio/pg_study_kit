@@ -1,0 +1,26 @@
+Index: postgresql-9.6.2/src/backend/storage/buffer/bufmgr.c
+===================================================================
+--- postgresql-9.6.2.orig/src/backend/storage/buffer/bufmgr.c	2017-02-06 21:45:25.000000000 +0000
++++ postgresql-9.6.2/src/backend/storage/buffer/bufmgr.c	2017-02-21 12:13:30.010029132 +0000
+@@ -785,6 +785,10 @@
+ 					LockBufferForCleanup(BufferDescriptorGetBuffer(bufHdr));
+ 			}
+ 
++			if (forkNum == MAIN_FORKNUM)
++			{
++				printf("[%d, %d, %d]\n", smgr->smgr_rnode.node.relNode, blockNum, *hit); fflush(stdout); usleep(1000);
++			}
+ 			return BufferDescriptorGetBuffer(bufHdr);
+ 		}
+ 
+@@ -961,6 +965,10 @@
+ 									  isExtend,
+ 									  found);
+ 
++	if (forkNum == MAIN_FORKNUM)
++	{
++		printf("[%d, %d, %d]\n", smgr->smgr_rnode.node.relNode, blockNum, *hit); fflush(stdout); usleep(1000);
++	}
+ 	return BufferDescriptorGetBuffer(bufHdr);
+ }
+ 
