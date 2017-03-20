@@ -45,12 +45,12 @@ function register(relname) {
 }
 document.addEventListener('DOMContentLoaded', () => {
     let promises = [
-        // register('pgbench_accounts'),
-        // register('pgbench_accounts_pkey'),
-        register('t1'),
-        register('t1_pkey'),
-        register('t2'),
-        register('t2_pkey'),
+        register('pgbench_accounts'),
+        register('pgbench_accounts_pkey'),
+        // register('t1'),
+        // register('t1_pkey'),
+        // register('t2'),
+        // register('t2_pkey'),
     ];
     Promise.all(promises).then(values => {
         values.forEach(res => {
