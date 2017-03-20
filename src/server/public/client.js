@@ -43,6 +43,8 @@ const map = new Map();
 function register(relname) {
     return fetch('/relations/' + relname);
 }
+
+const root = document.getElementById("root");
 document.addEventListener('DOMContentLoaded', () => {
     let promises = [
         register('pgbench_accounts'),
@@ -57,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             res.json().then(relations => {
                 let view = new View(relations[0].relname, relations[0].relpages, relations[0].relfilenode);
                 map.set(relations[0].relfilenode, view);
-                document.body.appendChild(view.div);
+                root.appendChild(view.div);
             });
         });
     });
@@ -73,5 +75,26 @@ socket.on("message", msg => {
     var [rel, blockNo, hit] = msg;
     if (map.has(rel)) {
         map.get(rel).point(blockNo, hit);
+    }
+});
+
+
+function sendQuery(query)
+{
+    return fetch("/query", {
+        method: "post",
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            query: query
+        })
+    })
+}
+
+const text = document.getElementById("query_text");
+text.addEventListener("keyup", function(ev) {
+    if (ev.ctrlKey && ev.key === "Enter") {
+        sendQuery(this.value);
     }
 });
