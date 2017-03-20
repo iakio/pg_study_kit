@@ -3,8 +3,8 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const pg = require('pg');
-
-app.use(express.static('public'));
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
 app.get('/relations/:relname', (req, res) => {
     const client = new pg.Client({
         // database: 'pagila'
