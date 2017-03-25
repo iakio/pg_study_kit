@@ -47,7 +47,7 @@ Vue.component('rel-canvas', {
                 ctx.fillStyle = "#f00";
                 ctx.fillRect(x * SCALE, y * SCALE, SCALE, SCALE);
             }
-        }
+        },
     }
 });
 
@@ -57,7 +57,12 @@ const data = {
 
 const app = new Vue({
     el: "#app",
-    data
+    data,
+    methods: {
+        onkeyup: function (ev) {
+            sendQuery(ev.target.value);
+        }
+    }
 });
 
 function register(relname) {
@@ -117,10 +122,3 @@ function sendQuery(query) {
         })
     })
 }
-
-const text = document.getElementById("query_text");
-text.addEventListener("keyup", function (ev) {
-    if (ev.ctrlKey && ev.key === "Enter") {
-        sendQuery(this.value);
-    }
-});

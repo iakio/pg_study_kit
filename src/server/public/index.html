@@ -23,10 +23,8 @@
            :relpages="rel.relpages"
            ></rel-canvas>
       </div>
-    </div>
-    <div id="root">
       <form>
-        <textarea id="query_text"></textarea>
+        <textarea @keyup.ctrl.enter="onkeyup"></textarea>
       </form>
     </div>
     <script src="https://unpkg.com/vue"></script>
