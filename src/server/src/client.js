@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 const socket = io();
 const WIDTH = 640;
 const SCALE = 16;
