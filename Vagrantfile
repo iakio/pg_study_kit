@@ -20,9 +20,6 @@ Vagrant.configure("2") do |config|
     nvm install node
     nvm use node
 
-    cd /vagrant/src/server
-    npm install
-
     mkdir $HOME/src
     curl -o- https://ftp.postgresql.org/pub/source/v9.6.2/postgresql-9.6.2.tar.bz2 | tar jxf - -C $HOME/src
     cd $HOME/src/postgresql-9.6.2
