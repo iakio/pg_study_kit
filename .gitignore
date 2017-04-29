@@ -1,4 +1,5 @@
 /.vagrant
 /src/server/node_modules
+/src/server/public/bundle.js
 .vscode
 npm-debug.log
