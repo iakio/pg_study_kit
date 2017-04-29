@@ -13,11 +13,21 @@
     </style>
   </head>
   <body>
-    <div id="root">
+    <div id="app">
+      <div v-for="rel in relations">
+        <rel-canvas
+           :width="rel.width"
+           :height="rel.height"
+           :relname="rel.relname"
+           :relfilenode="rel.relfilenode"
+           :relpages="rel.relpages"
+           ></rel-canvas>
+      </div>
       <form>
-        <textarea id="query_text"></textarea>
+        <textarea @keyup.ctrl.enter="onkeyup"></textarea>
       </form>
     </div>
+    <script src="https://unpkg.com/vue"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="client.js"></script>
   </body>
