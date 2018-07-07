@@ -1,35 +1,35 @@
-
-FROM node:7
+FROM node:8
 
 ENV PG_VERSION 9.6.2
-
-RUN set -ex \
-    && mkdir -p /usr/src/postgres \
-    && wget "https://ftp.postgresql.org/pub/source/v$PG_VERSION/postgresql-$PG_VERSION.tar.bz2" \
-    && tar jxf postgresql-$PG_VERSION.tar.bz2 -C /usr/local/src
-
-COPY src /usr/local/src
-
-RUN set -ex \
-    && cd /usr/local/src/postgresql-$PG_VERSION \
-    && patch -p1 < ../patches/pgstudy-print-buffer.patch \
-    && patch -p1 < ../patches/pgstudy-guc.patch \
-    && ./configure \
-    && make install
 
 USER node
 
 WORKDIR /home/node
 
+COPY src src
+
 RUN set -ex \
-    && cp -r /usr/local/src/server . \
-    && cd server \
-    && npm install --no-bin-links \
-    && /usr/local/pgsql/bin/initdb -D ../data > /dev/null \
-    && /usr/local/pgsql/bin/pg_ctl start -w -D ../data \
-    && /usr/local/pgsql/bin/createdb \
-    && /usr/local/pgsql/bin/pg_ctl stop -w -D ../data
+    && mkdir pgsql \
+    && wget "https://ftp.postgresql.org/pub/source/v$PG_VERSION/postgresql-$PG_VERSION.tar.bz2" \
+    && tar jxf postgresql-$PG_VERSION.tar.bz2
 
-CMD /usr/local/pgsql/bin/postgres -D data | node server/server.js
+RUN set -ex \
+    && cd postgresql-$PG_VERSION \
+    && ./configure --prefix=$HOME/pgsql\
+    && make install
 
-EXPOSE 3000 5432
+RUN set -ex \
+    && /home/node/pgsql/bin/initdb -D data > /dev/null \
+    && echo "host all all all trust" >> data/pg_hba.conf \
+    && /home/node/pgsql/bin/pg_ctl start -w -D data \
+    && /home/node/pgsql/bin/createdb \
+    && /home/node/pgsql/bin/pg_ctl stop -w -D data
+
+RUN set -ex \
+    && cd postgresql-$PG_VERSION \
+    && patch -p1 < ../src/patches/pgstudy-print-buffer.patch \
+    && patch -p1 < ../src/patches/pgstudy-guc.patch \
+    && ./configure --prefix=$HOME/pgsql\
+    && make install
+
+

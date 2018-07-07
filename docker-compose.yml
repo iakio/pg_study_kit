@@ -1,0 +1,15 @@
+version: "2"
+services:
+  db:
+    build: .
+    user: node
+    working_dir: /home/node
+    environment:
+      PGUSER: node
+    command: sh -c "/home/node/pgsql/bin/postgres -D data --listen_addresses=* --autovacuum=off --log-statement=all | node pg_study_kit/pg_study_kit_ui/server.js"
+    volumes:
+      - .:/home/node/pg_study_kit
+    ports:
+      - "5432:5432"
+      - "3000:3000"
+
